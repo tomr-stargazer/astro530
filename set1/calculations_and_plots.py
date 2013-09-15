@@ -18,6 +18,9 @@ tau_array = [3, 1, 0.3, 0.1]
 frequency_array = np.logspace(12, 17) # In units of Hz. 
 wavelength_array = c / frequency_array #Spans a wavelength range <10nm to >100um
 
+# Make a figure
+fig = plt.figure()
+
 for tau in tau_array:
 
     flux_array = np.zeros_like(frequency_array)
@@ -28,11 +31,15 @@ for tau in tau_array:
     plt.plot(wavelength_array, flux_array*frequency_array, label=r"$\tau$ = %s" % tau)
 
 
-plt.xlabel("Wavelength (meters)")
-plt.ylabel("Flux * frequency")
+plt.xlabel(r"Wavelength $\lambda$ (meters)")
+plt.ylabel(r"$\nu \cdot \mathcal{F}_\nu$ (Flux times frequency)")
 
 plt.title("Problem Set 1, problem #3b")
 
 plt.legend(loc = 'lower right')
 plt.loglog()
+
+plt.xlim(5e-8, 1e-5)
+plt.ylim(1, 1e8)
+
 plt.show()
