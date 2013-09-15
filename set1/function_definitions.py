@@ -1,5 +1,5 @@
 """
-This is a script for the computational parts of Problem Set 1.
+Module that defines functions for the computational parts of Problem Set 1.
 
 Some tips given here: http://docs.scipy.org/doc/scipy/reference/tutorial/integrate.html
 
