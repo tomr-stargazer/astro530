@@ -1,11 +1,17 @@
 """
 This is a script for the computational parts of Problem Set 1.
 
+Some tips given here: http://docs.scipy.org/doc/scipy/reference/tutorial/integrate.html
+
+I'm trying out the Quantity / constants modules from astropy, 
+with the unit handling and everything. It's going well so far.
+
 """
 
 from __future__ import division
 
 import numpy as np
+from scipy.integrate import quad
 import astropy.constants as const
 from astropy.units.quantity import Quantity
 
@@ -51,6 +57,57 @@ def planck_function(effective_temperature, frequency):
                  )
 
     return intensity
+
+
+def flux(optical_depth, frequency, effective_temperature):
+    """
+    Computes the Flux per frequency at an optical depth for T_eff.
+
+    T_eff : `effective_temperature`
+    nu : `frequency`
+    tau : `optical_depth`
+
+    Flux:
+    F_\nu(\tau_\nu) = 2 \pi \int_{\tau_\nu}^{\infty} S_\nu(t_\nu) E_2(t_\nu - \tau_\nu) d t_\nu - 2 \pi \int_0^{\tau_\nu} S_\nu(t_\nu) E_2(\tau_\nu - t_\nu)dt_\nu
+
+    in this case, S_\nu = B_\nu (Planck's function, as shown below):
+    
+    Planck's Law:
+    B_\nu(T_{eff}) = \frac{2 h \nu^3}{ c^2 } ( \exp(h \nu / k_B T_{eff}) - 1)^{-1} 
+    (see: http://en.wikipedia.org/wiki/Planck's_law)
+
+    and E_2 is given by:
+    E_2 = x \int_x^\infty y^{-2} e^{-y} dy
+    
+
+    Parameters
+    ----------
+    optical_depth : float (unitless)
+        The optical depth $\tau$ through which an observer views the flux.
+    frequency : float (in units seconds^{-1})
+        The frequency $\nu$ of the light being considered.
+    effective_temperature : float (in units Kelvin)
+        The effective temperature $T_{eff}$ of the blackbody 
+        under consideration. 
+
+    Returns
+    -------
+    intensity : float
+        The intensity $B_\nu(T_{eff})$ (also known as Spectral Radiance: 
+        http://en.wikipedia.org/wiki/Radiance ) of the blackbody radiation
+        at the given frequency.
+
+    """
+
+    def E2(y):
+        """ Second exponential integral. """
+        
+        e2 = y * quad( y**(-2) * np.exp(-y), y, np.inf)
+        return e2
+
+    
+
+    
 
 
 def test_planck_function():
