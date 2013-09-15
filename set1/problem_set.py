@@ -17,7 +17,7 @@ from astropy.units.quantity import Quantity
 
 
 def planck_function(effective_temperature, frequency):
-    """
+    r"""
     Computes the Planck's Law intensity per frequency at T_eff.
 
     T_eff : `effective_temperature`
@@ -88,23 +88,26 @@ def eddington_temperature(optical_depth, effective_temperature):
 
 
 def flux(optical_depth, frequency, effective_temperature):
-    """
+    r"""
     Computes the Flux per frequency at an optical depth for T_eff.
 
     T_eff : `effective_temperature`
     nu : `frequency`
     tau : `optical_depth`
 
-    Flux:
+    Flux: 
+    .. math::
     F_\nu(\tau_\nu) = 2 \pi \int_{\tau_\nu}^{\infty} S_\nu(t_\nu) E_2(t_\nu - \tau_\nu) d t_\nu - 2 \pi \int_0^{\tau_\nu} S_\nu(t_\nu) E_2(\tau_\nu - t_\nu)dt_\nu
 
     in this case, S_\nu = B_\nu (Planck's function, as shown below):
     
     Planck's Law:
+    .. math::
     B_\nu(T_{eff}) = \frac{2 h \nu^3}{ c^2 } ( \exp(h \nu / k_B T_{eff}) - 1)^{-1} 
     (see: http://en.wikipedia.org/wiki/Planck's_law)
 
     and E_2 is given by:
+    .. math::
     E_2 = x \int_x^\infty y^{-2} e^{-y} dy
     
 
