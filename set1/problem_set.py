@@ -40,7 +40,8 @@ def planck_function(effective_temperature, frequency):
     intensity : float
         The intensity $B_\nu(T_{eff})$ (also known as Spectral Radiance: 
         http://en.wikipedia.org/wiki/Radiance ) of the blackbody radiation
-        at the given frequency.
+        at the given frequency. Given in units of Hz^3 J s^3 / (m^2), which is
+        identical to units of W / (m^2 Hz sr) .
 
     """
 
