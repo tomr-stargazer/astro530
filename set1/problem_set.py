@@ -37,7 +37,7 @@ def planck_function(effective_temperature, frequency):
 
     Returns
     -------
-    intensity : float
+    intensity : astropy.units.quantity.Quantity
         The intensity $B_\nu(T_{eff})$ (also known as Spectral Radiance: 
         http://en.wikipedia.org/wiki/Radiance ) of the blackbody radiation
         at the given frequency. Given in units of Hz^3 J s^3 / (m^2), which is
@@ -74,6 +74,8 @@ def eddington_temperature(optical_depth, effective_temperature):
     
     \tau : `optical_depth`
     T_{eff} : `effective_temperature`
+
+    T^4 = (3/4) T_{eff}^4 (\tau + 2/3)
     
     """
     
@@ -118,10 +120,9 @@ def flux(optical_depth, frequency, effective_temperature):
 
     Returns
     -------
-    intensity : float
-        The intensity $B_\nu(T_{eff})$ (also known as Spectral Radiance: 
-        http://en.wikipedia.org/wiki/Radiance ) of the blackbody radiation
-        at the given frequency.
+    flux : float
+        The flux $F_\nu(\tau)$ observed at the given optical depth inside
+        the star with T_eff at the given frequency.
 
     """
 
