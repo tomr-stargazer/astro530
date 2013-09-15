@@ -60,10 +60,10 @@ def planck_function(effective_temperature, frequency):
     return intensity
 
 
-def E2(y):
+def E2(x):
     """ Second exponential integral. See Lee's notes. """
     
-    e2 = y * quad( y**(-2) * np.exp(-y), y, np.inf)
+    e2 = x * quad( lambda t: t**(-2) * np.exp(-t), x, np.inf)[0]
     return e2
 
 
