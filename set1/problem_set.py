@@ -60,6 +60,31 @@ def planck_function(effective_temperature, frequency):
     return intensity
 
 
+def E2(y):
+    """ Second exponential integral. See Lee's notes. """
+    
+    e2 = y * quad( y**(-2) * np.exp(-y), y, np.inf)
+    return e2
+
+
+def eddington_temperature(optical_depth, effective_temperature):
+    """ 
+    Uses the Eddington approximation to give a local temperature
+    as a function of observer's optical depth and the star's T_eff.
+    
+    \tau : `optical_depth`
+    T_{eff} : `effective_temperature`
+    
+    """
+    
+    tau = optical_depth
+    T_eff = effective_temperature
+    
+    T4 = (3/4) * T_eff**4 * (tau + 2/3)
+    
+    return T4**(1/4)
+
+
 def flux(optical_depth, frequency, effective_temperature):
     """
     Computes the Flux per frequency at an optical depth for T_eff.
@@ -100,13 +125,8 @@ def flux(optical_depth, frequency, effective_temperature):
 
     """
 
-    def E2(y):
-        """ Second exponential integral. """
-        
-        e2 = y * quad( y**(-2) * np.exp(-y), y, np.inf)
-        return e2
 
-    
+    flux = 2 * np.pi * quad( 
 
     
 
