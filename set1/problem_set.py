@@ -6,8 +6,8 @@ This is a script for the computational parts of Problem Set 1.
 from __future__ import division
 
 import numpy as np
-#import scipy.constants
 import astropy.constants as const
+from astropy.units.quantity import Quantity
 
 
 def planck_function(effective_temperature, frequency):
@@ -38,12 +38,16 @@ def planck_function(effective_temperature, frequency):
 
     """
 
-    h = const.h.to('J s')#.value # Planck's constant h, in Joules * seconds.
-    c = const.c.to('m/s')#.value # Speed of light c, in meters / seconds.
-    k_B = const.k_B.to('J/K')#.value # Boltzmann constant k_B, in Joules / kelvin.
+    # Converting user-supplied arguments into Quantity values.
+    Teff = Quantity(effective_temperature, 'K')
+    nu = Quantity(frequency, 'Hz')
+    
+    h = const.h.to('J s') # Planck's constant h, in Joules * seconds.
+    c = const.c.to('m/s') # Speed of light c, in meters / seconds.
+    k_B = const.k_B.to('J/K') # Boltzmann constant k_B, in Joules / kelvin.
 
-    intensity = ((2 * h * (frequency)**3) / c**2 / 
-                 (np.exp( (h * frequency) / (k_B * effective_temperature)) - 1)
+    intensity = ((2 * h * (nu)**3) / c**2 / 
+                 (np.exp( (h * nu) / (k_B * Teff)) - 1)
                  )
 
     return intensity
@@ -51,8 +55,7 @@ def planck_function(effective_temperature, frequency):
 
 def test_planck_function():
 
-    assert 1 == 1 #placeholder
-
-    #    assert planck_function(6000, 2e12) == 
+    # See: http://wolfr.am/1ghoEBo for Wolfram Alpha example result
+    assert round(planck_function(6000, 200e12), 8+3) == 2.985e-8
     
     
