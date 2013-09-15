@@ -10,40 +10,48 @@ from scipy.constants import c
 
 from function_definitions import *
 
-# Some constants
+def problem_3b(spacing=20):
+    """
+    Calculates and plots the figure for 3b.
 
-T_eff = 5780 # kelvin; similar to the Sun
-tau_array = [3, 1, 0.3, 0.1]
+    """
 
-frequency_array = np.logspace(12, 17, num=200) # In units of Hz. 
-wavelength_array = c / frequency_array #Spans a wavelength range <10nm to >100um
+    # Some constants
 
-# Make a figure
-fig = plt.figure()
+    T_eff = 5780 # kelvin; similar to the Sun
+    tau_array = [3, 1, 0.3, 0.1]
 
-for tau in tau_array:
+    frequency_array = np.logspace(12, 17, num=spacing) # In units of Hz. 
+    wavelength_array = c / frequency_array #Spans a wavelength range <10nm to >100um
 
-    flux_array = np.zeros_like(frequency_array)
-    for i, nu in zip( range(len(flux_array)), frequency_array):
 
-        flux_array[i] = flux(tau, nu, T_eff)
 
-    plt.plot( wavelength_array*1e6, 
-              flux_array*frequency_array, 
-              label=r"$\tau$ = %s" % tau,
-              lw=2)
+    # Make a figure
+    fig = plt.figure()
 
-plt.xlabel(r"Wavelength $\lambda$ (microns $\mu m$)")
-plt.ylabel(r"$\nu \cdot \mathcal{F}_\nu$ (Flux times frequency)")
+    for tau in tau_array:
 
-plt.title("Problem Set 1, problem #3b")
+        flux_array = np.zeros_like(frequency_array)
+        for i, nu in zip( range(len(flux_array)), frequency_array):
 
-plt.legend(loc = 'lower right')
-plt.loglog()
+            flux_array[i] = flux(tau, nu, T_eff)
 
-plt.xlim(5e-2, 1e1)
-plt.ylim(1, 1e8)
+        plt.plot( wavelength_array*1e6, 
+                  flux_array*frequency_array, 
+                  label=r"$\tau$ = %s" % tau,
+                  lw=2)
 
-plt.text(0.3, 1e4, r"$T_{eff} = 5780$ K", fontsize=18)
+    plt.xlabel(r"Wavelength $\lambda$ (microns $\mu m$)")
+    plt.ylabel(r"$\nu \cdot \mathcal{F}_\nu$ (Flux times frequency)")
 
-plt.show()
+    plt.title("Problem Set 1, problem #3b")
+
+    plt.legend(loc = 'lower right')
+    plt.loglog()
+
+    plt.xlim(5e-2, 1e1)
+    plt.ylim(1, 1e8)
+
+    plt.text(0.3, 1e4, r"$T_{eff} = 5780$ K", fontsize=18)
+
+    plt.show()
