@@ -28,10 +28,12 @@ for tau in tau_array:
 
         flux_array[i] = flux(tau, nu, T_eff)
 
-    plt.plot(wavelength_array, flux_array*frequency_array, label=r"$\tau$ = %s" % tau)
+    plt.plot( wavelength_array*1e6, 
+              flux_array*frequency_array, 
+              label=r"$\tau$ = %s" % tau)
 
 
-plt.xlabel(r"Wavelength $\lambda$ (meters)")
+plt.xlabel(r"Wavelength $\lambda$ (microns $\mu m$)")
 plt.ylabel(r"$\nu \cdot \mathcal{F}_\nu$ (Flux times frequency)")
 
 plt.title("Problem Set 1, problem #3b")
@@ -39,7 +41,7 @@ plt.title("Problem Set 1, problem #3b")
 plt.legend(loc = 'lower right')
 plt.loglog()
 
-plt.xlim(5e-8, 1e-5)
+plt.xlim(5e-2, 1e1)
 plt.ylim(1, 1e8)
 
 plt.show()
