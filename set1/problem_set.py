@@ -5,6 +5,9 @@ This is a script for the computational parts of Problem Set 1.
 
 from __future__ import division
 
+import scipy.constants
+import astropy.constants as const
+
 
 def planck_function(effective_temperature, frequency):
     """
@@ -12,6 +15,10 @@ def planck_function(effective_temperature, frequency):
 
     T_eff : `effective_temperature`
     nu : `frequency`
+
+    Planck's Law:
+    B_\nu(T_{eff}) = \frac{2 h \nu^3}{ c^2 } ( \exp(h \nu / k_B T_{eff}) - 1)^{-1} 
+    (see: http://en.wikipedia.org/wiki/Planck's_law)
 
     Parameters
     ----------
@@ -30,4 +37,12 @@ def planck_function(effective_temperature, frequency):
 
     """
 
+    intensity = 2 * const.h * (frequency)**3 
+
+    return intensity
+
+
+def test_planck_function():
+
+    assert 1 == 1 #placeholder
     
