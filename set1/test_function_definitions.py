@@ -1,3 +1,5 @@
+from __future__ import division
+
 from function_definitions import *
 
 def test_planck_function():
