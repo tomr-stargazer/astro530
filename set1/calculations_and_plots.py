@@ -15,7 +15,7 @@ from function_definitions import *
 T_eff = 5780 # kelvin; similar to the Sun
 tau_array = [3, 1, 0.3, 0.1]
 
-frequency_array = np.logspace(12, 17) # In units of Hz. 
+frequency_array = np.logspace(12, 17, num=200) # In units of Hz. 
 wavelength_array = c / frequency_array #Spans a wavelength range <10nm to >100um
 
 # Make a figure
@@ -30,8 +30,8 @@ for tau in tau_array:
 
     plt.plot( wavelength_array*1e6, 
               flux_array*frequency_array, 
-              label=r"$\tau$ = %s" % tau)
-
+              label=r"$\tau$ = %s" % tau,
+              lw=2)
 
 plt.xlabel(r"Wavelength $\lambda$ (microns $\mu m$)")
 plt.ylabel(r"$\nu \cdot \mathcal{F}_\nu$ (Flux times frequency)")
@@ -43,5 +43,7 @@ plt.loglog()
 
 plt.xlim(5e-2, 1e1)
 plt.ylim(1, 1e8)
+
+plt.text(0.3, 1e4, r"$T_{eff} = 5780$ K", fontsize=18)
 
 plt.show()
