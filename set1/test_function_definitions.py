@@ -18,5 +18,5 @@ def test_eddington_temperature():
     assert eddington_temperature(1/2, 6000) < 6000
 
 def test_E2():
-    # See Wolfram Alpha
+    # See: http://wolfr.am/16vss0D for Wolfram Alpha example result
     assert round(E2(1), 4) == 0.1485
