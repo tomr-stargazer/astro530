@@ -129,10 +129,21 @@ def flux(optical_depth, frequency, effective_temperature):
 
     """
 
+    tau = optical_depth
+    nu = frequency
+    T_eff = effective_temperature
 
-    flux = 2 * np.pi * quad( 
+    temp_at_t = lambda t: eddington_temperature(t, T_eff)
 
-    
+    flux = (
+        2 * np.pi * quad(
+            (lambda t: planck_function(temp_at_t(t), nu) * E2(t - tau)),
+            tau, np.inf)[0] -
+        2 * np.pi * quad(
+            (lambda t: planck_function(temp_at_t(t), nu) * E2(tau - t)),
+            0, tau)[0] )
+
+    return flux
 
 
 def test_planck_function():
