@@ -10,21 +10,19 @@ from scipy.constants import c
 
 from function_definitions import *
 
+# Some constants
+
+T_eff = 5780 # kelvin; similar to the Sun
+tau_array = [3, 1, 0.3, 0.1]
+
 def problem_3b(spacing=20):
     """
     Calculates and plots the figure for 3b.
 
     """
-
-    # Some constants
-
-    T_eff = 5780 # kelvin; similar to the Sun
-    tau_array = [3, 1, 0.3, 0.1]
-
+    
     frequency_array = np.logspace(12, 17, num=spacing) # In units of Hz. 
     wavelength_array = c / frequency_array #Spans a wavelength range <10nm to >100um
-
-
 
     # Make a figure
     fig = plt.figure()
@@ -55,3 +53,21 @@ def problem_3b(spacing=20):
     plt.text(0.3, 1e4, r"$T_{eff} = 5780$ K", fontsize=18)
 
     plt.show()
+
+
+def problem_3c():
+    """
+    Calculates and plots stuff for problem 3c.
+
+    """
+    
+
+    for tau in tau_array:
+
+        flux_at_tau = lambda nu: flux(tau, nu, T_eff)
+
+        integrated_flux_at_tau = quad(flux_at_tau, 1, 10)
+
+        print "Integrated flux at tau=%s: \n %s" % (tau, integrated_flux_at_tau)
+
+    
