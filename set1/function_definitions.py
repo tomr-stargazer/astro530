@@ -12,6 +12,7 @@ from __future__ import division
 
 import numpy as np
 from scipy.integrate import quad
+import scipy.special
 import astropy.constants as const
 from astropy.units.quantity import Quantity
 
@@ -59,12 +60,9 @@ def planck_function(effective_temperature, frequency):
 
     return intensity
 
-
 def E2(x):
     """ Second exponential integral. See Lee's notes. """
-    
-    e2 = x * quad( lambda t: t**(-2) * np.exp(-t), x, np.inf)[0]
-    return e2
+    return scipy.special.expn(2, x)
 
 
 def eddington_temperature(optical_depth, effective_temperature):
