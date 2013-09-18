@@ -11,7 +11,8 @@ with the unit handling and everything. It's going well so far.
 from __future__ import division
 
 import numpy as np
-from scipy.integrate import quad
+from scipy.integrate import quad, trapz
+from scipy.constants import c
 import scipy.special
 import astropy.constants as const
 from astropy.units.quantity import Quantity
@@ -144,7 +145,7 @@ def flux(optical_depth, frequency, effective_temperature):
     return flux
 
 
-def integrated_flux(optical_depth, effective_temperature):
+def integrated_flux(optical_depth, effective_temperature, spacing=20):
     r"""
     Integrates Flux over all frequencies using trapezoidal approximation.
 
@@ -171,3 +172,17 @@ def integrated_flux(optical_depth, effective_temperature):
         at the given frequency.
 
     """
+
+    tau = optical_depth
+    T_eff = effective_temperature
+    
+    frequency_array = np.logspace(12, 17, num=spacing) # In units of Hz. 
+    wavelength_array = c / frequency_array  #Spans a wavelength range <10nm to >100um
+
+    flux_array = np.zeros_like(frequency_array, dtype=np.longdouble)
+    for i, nu in zip( range(len(flux_array)), frequency_array):
+        flux_array[i] = flux(tau, nu, T_eff)
+
+    integrated_flux = trapz( frequency_array*flux_array, frequency_array)
+
+    return integrated_flux

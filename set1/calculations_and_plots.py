@@ -60,13 +60,13 @@ def problem_3c():
     Calculates and plots stuff for problem 3c.
 
     """
-    
+    tau_array = np.logspace(-5, 1, 6)
 
     for tau in tau_array:
 
         flux_at_tau = lambda nu: flux(tau, nu, T_eff)
 
-        integrated_flux_at_tau = quad(flux_at_tau, 1, 10)
+        integrated_flux_at_tau = quad(flux_at_tau, 1e10, 1e18)[0]
 
         print "Integrated flux at tau=%s: \n %s" % (tau, integrated_flux_at_tau)
 
