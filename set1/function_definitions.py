@@ -183,6 +183,6 @@ def integrated_flux(optical_depth, effective_temperature, spacing=20):
     for i, nu in zip( range(len(flux_array)), frequency_array):
         flux_array[i] = flux(tau, nu, T_eff)
 
-    integrated_flux = trapz( frequency_array*flux_array, frequency_array)
+    integrated_flux = trapz( flux_array, frequency_array)
 
     return integrated_flux
