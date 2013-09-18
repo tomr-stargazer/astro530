@@ -144,3 +144,30 @@ def flux(optical_depth, frequency, effective_temperature):
     return flux
 
 
+def integrated_flux(optical_depth, effective_temperature):
+    r"""
+    Integrates Flux over all frequencies using trapezoidal approximation.
+
+    tau : `optical_depth`
+    T_eff : `effective_temperature`
+
+    Integrated Flux:
+    .. math::
+    \int_0^\infty \mathcal{F_\nu} d\nu
+
+    Parameters
+    ----------
+    optical_depth : float (unitless)
+        The optical depth $\tau$ through which an observer views the flux.
+    effective_temperature : float (in units Kelvin)
+        The effective temperature $T_{eff}$ of the blackbody 
+        under consideration. 
+
+    Returns
+    -------
+    integrated_flux : float
+        The integrated flux $\int F_\nu(\tau) d\nu$ over all wavelengths 
+        observed at the given optical depth inside the star with T_eff 
+        at the given frequency.
+
+    """
