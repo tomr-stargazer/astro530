@@ -144,6 +144,11 @@ def flux(optical_depth, frequency, effective_temperature):
 
     return flux
 
+def flux_trapezoidal(optical_depth, frequency, effective_temperature):
+    """ Calculates the flux with trapz instead of quad. """
+    pass
+    
+
 
 def integrated_flux(optical_depth, effective_temperature, spacing=20):
     r"""
