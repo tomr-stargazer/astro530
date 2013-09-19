@@ -15,7 +15,7 @@ from function_definitions import *
 T_eff = 5780 # kelvin; similar to the Sun
 tau_array = [3, 1, 0.3, 0.1]
 
-def problem_3b(spacing=20):
+def problem_3b(spacing=20, styles=['-',':','--','.']):
     """
     Calculates and plots the figure for 3b.
 
@@ -27,7 +27,7 @@ def problem_3b(spacing=20):
     # Make a figure
     fig = plt.figure()
 
-    for tau in tau_array:
+    for tau, style in zip(tau_array, styles):
 
         flux_array = np.zeros_like(frequency_array)
         for i, nu in zip( range(len(flux_array)), frequency_array):
@@ -36,6 +36,7 @@ def problem_3b(spacing=20):
 
         plt.plot( wavelength_array*1e6, 
                   flux_array*frequency_array, 
+                  style,
                   label=r"$\tau$ = %s" % tau,
                   lw=2)
 
