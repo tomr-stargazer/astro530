@@ -69,14 +69,14 @@ def saha_equation(degeneracy_of_lower_state,
 
     chi_i = Quantity(ionization_potential_between_states, units_of_energy)
 
-    n_e = Quantity(electron_number_density, '1 / (m3)')
+    n_e = Quantity(electron_number_density, '1 / (cm3)')
     T = Quantity(temperature, 'K')
 
     h = const.h.to(units_of_energy+' s')
     k_B = const.k_B.to(units_of_energy+' / (K)')
 
     # "Lambda" is just a name for this bundle of parameters and constants.
-    lambda_squared = (h**2 / (2 * np.pi * const.m_e * k_B * T)).to('m2')
+    lambda_squared = (h**2 / (2 * np.pi * const.m_e * k_B * T)).to('cm2')
 
     saha_ratio = (( 2 / lambda_squared**(3/2) *
                     g_ip1 / g_i *
@@ -125,7 +125,6 @@ def compute_grid_of_number_densities():
     for model in model_list:
 
         model_table = Table()
-        model
 
         grid_of_densities = np.zeros((len(degeneracy_of_states),
                                       len(atomic_weights))) * np.nan
