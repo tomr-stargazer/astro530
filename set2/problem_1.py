@@ -164,3 +164,11 @@ def compute_grid_of_number_densities():
         output_table_list.append(model_table)
         
     return output_table_list
+
+def write_outputs_to_disk():
+
+    table1, table2, table3 = compute_grid_of_number_densities()
+
+    table1.write("model1_grid.txt", format='ascii')
+    table2.write("model2_grid.txt", format='ascii')
+    table3.write("model3_grid.txt", format='ascii')
