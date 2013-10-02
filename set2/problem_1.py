@@ -75,9 +75,9 @@ def saha_equation(degeneracy_of_lower_state,
     # "Lambda" is just a name for this bundle of parameters and constants.
     lambda_squared = (h**2 / (2 * np.pi * const.m_e * k_B * T)).to('m2')
 
-    saha_ratio = ( 2 / lambda_squared**(3/2) *
-                   g_ip1 / g_i *
-                   np.exp(-(chi_i) /(k_B * T))
-                   ) / n_e
+    saha_ratio = (( 2 / lambda_squared**(3/2) *
+                    g_ip1 / g_i *
+                    np.exp(-(chi_i) /(k_B * T))
+                    ) / n_e).value
 
     return saha_ratio

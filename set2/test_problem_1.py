@@ -24,11 +24,11 @@ def test_saha_equation():
                               upper_state_degeneracy,
                               chi_01, T, n_e(T))
 
-        print T, saha, (saha / (1.0+saha.value))
+        print T, saha, (saha / (1+saha))
 
         # Caroll & Ostlie say that when P_e = 20 N m^-2,
         # 50% ionization occurs at T~9600. Let's make this the test.
         if T < 9600:
-            assert saha.value/(1+saha.value) < .5
+            assert saha/(1+saha) < .5
         elif T > 9600:
-            assert saha.value/(1+saha.value) > .5
+            assert saha/(1+saha) > .5
