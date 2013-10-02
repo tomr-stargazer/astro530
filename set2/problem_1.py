@@ -24,6 +24,7 @@ import numpy as np
 
 import astropy.constants as const
 from astropy.units.quantity import Quantity
+from astropy.table import Table, Column
 
 
 Model_1 = {'T_eff': 4500,
@@ -122,6 +123,12 @@ def compute_grid_of_number_densities():
 
     for model in model_list:
 
+        model_table = Table()
+        model
+
+        grid_of_densities = np.zeros((len(degeneracy_of_states),
+                                      len(atomic_weights))) * np.nan
+
         print "Model parameters: "+str(model.items())
 
         for i in range(atomic_weights.size):
@@ -142,18 +149,17 @@ def compute_grid_of_number_densities():
 
                 saha_list.append(saha_ratio)
 
-                print "for atom %d, ion state %d, N%d/N%d = "%(i,j, j+1, j),
-                print saha_ratio
-
-            print saha_list
-
-            print number_density_of_each_state_from_saha(
+            number_densities_for_atom =number_density_of_each_state_from_saha(
                 saha_list, model['n_H'], abundances[i])
-                
-                
+
+            for j in range(len(number_densities_for_atom)):
+                grid_of_densities[j][i] = number_densities_for_atom[j]
+
+
+        model_table.add_column(Column("AW", atomic_weights))
+        for i in range(grid_of_densities.shape[0]):
+            model_table.add_column(Column("N_%d" % i, grid_of_densities[i]))
+
+        output_table_list.append(model_table)
         
-
-    
-
-
-
+    return output_table_list
