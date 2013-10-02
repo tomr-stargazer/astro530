@@ -23,6 +23,7 @@ from __future__ import division
 import numpy as np
 
 import astropy.constants as const
+from astropy.units.quantity import Quantity
 
 
 Model_1 = {'T_eff': 4500,
@@ -64,19 +65,18 @@ def saha_equation(degeneracy_of_lower_state,
     g_i = degeneracy_of_lower_state
     g_ip1 = degeneracy_of_upper_state
 
-    epsilon_i = ionization_energy_of_lower_state
-    epsilon_ip1 = ionization_energy_of_upper_state
+    epsilon_i = Quantity(ionization_energy_of_lower_state, units_of_energy)
+    epsilon_ip1 = Quantity(ionization_energy_of_upper_state, units_of_energy)
 
-    n_e = electron_number_density
-    T = temperature
+    n_e = Quantity(electron_number_density, '1 / (m3)')
+    T = Quantity(temperature, 'K')
 
     h = const.h.to(units_of_energy+' s')
     k_B = const.k_B.to(units_of_energy+' / (K)')
 
-    lambda_constant = np.sqrt(h**2 /
-                              (2 * np.pi * const.m_e * k_B * T) )
+    lambda_squared = (h**2 / (2 * np.pi * const.m_e * k_B * T)).to('m2')
 
-    saha_ratio = ( 2 / lambda_constant**3 *
+    saha_ratio = ( 2 / lambda_squared**(3/2) *
                    g_ip1 / g_i *
                    np.exp(-(epsilon_ip1 - epsilon_i) /(k_B * T))
                    ) / n_e
