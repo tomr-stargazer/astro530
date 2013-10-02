@@ -87,7 +87,7 @@ def saha_equation(degeneracy_of_lower_state,
 
 def number_density_of_each_state_from_saha(saha_list, n_H, abundance):
     """
-    Gives numbder density of each ionization state given ALL of the
+    Gives number density of each ionization state given ALL of the
     outputs of the Saha equation for one atom.
 
     Thanks enormously to Danny Zhu for recommending I not turn this
@@ -105,7 +105,9 @@ def number_density_of_each_state_from_saha(saha_list, n_H, abundance):
 
 def compute_grid_of_number_densities():
     """
-    Computes a grid of number densities.
+    Computes a grid of number densities for each model. 
+
+    Returns three tables to you.
 
     """
 
@@ -117,7 +119,6 @@ def compute_grid_of_number_densities():
 
     degeneracy_of_states = [atomic_table[:,x] for x in range(2,8)]
     ionization_energy_per_level = [atomic_table[:,x] for x in range(8,13)]
-
 
     output_table_list = []
 
