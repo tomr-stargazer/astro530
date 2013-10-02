@@ -172,3 +172,7 @@ def write_outputs_to_disk():
     table1.write("model1_grid.txt", format='ascii')
     table2.write("model2_grid.txt", format='ascii')
     table3.write("model3_grid.txt", format='ascii')
+
+
+if __name__ == "__main__":
+    write_outputs_to_disk()
