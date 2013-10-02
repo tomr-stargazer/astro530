@@ -92,4 +92,118 @@ abundances = atomic_table[:,1]
 
 degeneracy_of_states = [atomic_table[:,x] for x in range(2,8)]
 ionization_energy_per_level = [atomic_table[:,x] for x in range(8,13)]
-                        
+
+def number_density_of_each_state_from_saha(saha_list, n_H, abundance):
+    """
+    Gives number density of each ionization state given ALL of the 
+    outputs of the Saha equation.
+
+    """
+
+    output_list = []
+
+    n = len(saha_list)
+
+    for i in range(n):
+
+        numerator = saha_list[i] 
+        denominator = reduce(
+            add, [expand_saha_ratio(saha_list, i, j) for j in range(n)])
+
+        print "saha_list[i] = %f" % numerator
+        print "expand_saha_ratio(...) = %f" % denominator
+
+        
+        output_list.append( numerator / denominator )
+
+        saha_list[i] / 
+                            expand_saha_ratio(saha_list, i+1, i) )
+
+    return output_list
+        
+
+def number_density_of_each_state_from_saha2(saha_list, n_H, abundance):
+    """
+    Gives numbder density of each ionization state given ALL of the
+    outputs of the Saha equation for one atom.
+
+    Thanks enormously to Danny Zhu for recommending I not turn this
+    into a total recursive clusterfuck. Multiplication's easier.
+
+    "(if N=5 and the ratios are r_1,r_2,r_3,r_4) 
+    {1, r_1, r_1 r_2, r_1 r_2 r_3, r_1 r_2 r_3 r_4} / (1 + r_1 + r_1 r_2 + r_1 r_2 r_3 + r_1 r_2 r_3 r_4) ?" --dzhu
+
+    """
+    numerator_array = cumprod(saha_list) * abundance * n_H
+    denominator = reduce(add, numerator_array)
+
+    return numerator_array/denominator
+
+        
+def expand_saha_ratio(ratio_list, upper_index, lower_index):
+    """
+    Expands the saha ratios in the denominator of n_i / n_total.
+
+    It's RECURSIVE.
+
+    """
+
+    if upper_index == lower_index:
+        return 1
+    elif upper_index < lower_index:
+        return 1 / expand_saha_ratio(ratio_list, lower_index, upper_index)
+    elif upper_index - lower_index == 1:
+        return ratio_list[lower_index]
+    else:
+        return (expand_saha_ratio(ratio_list, upper_index, upper_index - 1) *
+                expand_saha_ratio(ratio_list, upper_index - 1, lower_index) )
+    
+
+def compute_grid_of_number_densities():
+    """
+    Computes a grid of number densities.
+
+    """
+
+    for model in model_list:
+
+        print "Model parameters: "+str(model.items())
+
+        for i in range(atomic_weights.size):
+
+            # For this atom, save all of the saha ratios.
+            saha_list = []
+
+            for j in range(len(ionization_energy_per_level)):
+
+                if ionization_energy_per_level[j][i] == 999:
+                    #                    print 'continuing'
+                    continue
+                #                else:
+                    #                    print 'not continuing'
+                
+                saha_ratio = saha_equation(
+                    degeneracy_of_states[j][i],
+                    degeneracy_of_states[j+1][i],
+                    ionization_energy_per_level[j][i],
+                    model['T'], model['n_e'])
+
+                saha_list.append(saha_ratio)
+
+                print "for atom %d, ion state %d, N%d/N%d = "%(i,j, j+1, j),
+                print saha_ratio
+
+            print saha_list
+
+            print number_density_of_each_state_from_saha(
+                saha_list, model['n_H'], abundances[i])
+
+            break
+                
+                
+        
+
+    
+
+
+
