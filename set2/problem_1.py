@@ -44,6 +44,8 @@ Model_3 = {'T_eff': 15000,
            'n_e': 3.17e14,
            'n_H': 3.67e14}
 
+model_list = [Model_1, Model_2, Model_3]
+
 
 def saha_equation(degeneracy_of_lower_state,
                   degeneracy_of_upper_state,
@@ -81,3 +83,13 @@ def saha_equation(degeneracy_of_lower_state,
                     ) / n_e).value
 
     return saha_ratio
+
+# let's load in that table
+atomic_table = np.loadtxt('Atomic_data_table.txt', skiprows=2)
+
+atomic_weights = atomic_table[:,0]
+abundances = atomic_table[:,1]
+
+degeneracy_of_states = [atomic_table[:,x] for x in range(2,8)]
+ionization_energy_per_level = [atomic_table[:,x] for x in range(8,13)]
+                        
