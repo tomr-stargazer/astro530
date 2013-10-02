@@ -84,15 +84,6 @@ def saha_equation(degeneracy_of_lower_state,
 
     return saha_ratio
 
-# let's load in that table
-atomic_table = np.loadtxt('Atomic_data_table.txt', skiprows=2)
-
-atomic_weights = atomic_table[:,0]
-abundances = atomic_table[:,1]
-
-degeneracy_of_states = [atomic_table[:,x] for x in range(2,8)]
-ionization_energy_per_level = [atomic_table[:,x] for x in range(8,13)]
-
 def number_density_of_each_state_from_saha(saha_list, n_H, abundance):
     """
     Gives numbder density of each ionization state given ALL of the
@@ -116,6 +107,18 @@ def compute_grid_of_number_densities():
     Computes a grid of number densities.
 
     """
+
+    # let's load in that table
+    atomic_table = np.loadtxt('Atomic_data_table.txt', skiprows=2)
+
+    atomic_weights = atomic_table[:,0]
+    abundances = atomic_table[:,1]
+
+    degeneracy_of_states = [atomic_table[:,x] for x in range(2,8)]
+    ionization_energy_per_level = [atomic_table[:,x] for x in range(8,13)]
+
+
+    output_table_list = []
 
     for model in model_list:
 
