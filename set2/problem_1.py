@@ -98,10 +98,10 @@ def number_density_of_each_state_from_saha(saha_list, n_H, abundance):
 
     """
     
-    numerator_array = np.cumprod([1]+saha_list) * abundance * n_H
+    numerator_array = np.cumprod([1]+saha_list)
     denominator = reduce(np.add, numerator_array)
 
-    return numerator_array/denominator
+    return numerator_array/denominator * abundance * n_H
 
 def compute_grid_of_number_densities():
     """
