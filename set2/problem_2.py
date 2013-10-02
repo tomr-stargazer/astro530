@@ -15,12 +15,7 @@ tables = compute_grid_of_number_densities()
 
 for table, n in zip(tables, range(1,4)):
 
-    # Calculate the electrons freed from each ion
-
-    # for i in range(6):
-    #     print "Sum for %d th ionization state:" % i
-    #     print np.nansum(table['N_%d' % i] * i)
-
+    # sums up the number of electrons freed by each ion species.
     n_e = sum([np.nansum(table['N_%d' % i] * i) for i in range(6)])
 
     print n_e, "Model %d" % n
