@@ -7,8 +7,14 @@ in three different stellar atmospheres.
 The Saha equation:
 https://en.wikipedia.org/wiki/Saha_ionization_equation
 
+but I have followed Carroll and Ostlie's choice to place 
+the electron number density $n_e$ on the denominator of the right 
+side of the equation, rather than the numerator of the left side.
+
+Thus:
+
 ..math::
-\frac{n_{i+1}n_e}{n_i} = \frac{2}{\Lambda^{3}}\frac{g_{i+1}}{g_i}\exp\left[-\frac{(\epsilon_{i+1}-\epsilon_i)}{k_BT}\right]
+\frac{n_{i+1}}{n_i} = \frac{2}{n_e\Lambda^{3}}\frac{g_{i+1}}{g_i}\exp\left[-\frac{(\epsilon_{i+1}-\epsilon_i)}{k_BT}\right]
 
 """
 
@@ -42,6 +48,7 @@ def saha_equation(degeneracy_of_lower_state,
                   degeneracy_of_upper_state,
                   ionization_energy_of_lower_state,
                   ionization_energy_of_upper_state,
+                  electron_number_density,
                   temperature,
                   units_of_energy='eV'):
     """
@@ -49,8 +56,8 @@ def saha_equation(degeneracy_of_lower_state,
 
     Returns
     -------
-    saha_parameter : float
-        The ratio n_{i+1} * n_e / n_i, the output of the Saha equation.
+    saha_ratio : float
+        The ratio n_{i+1} / n_i, the output of the Saha equation.
 
     """
 
@@ -60,6 +67,7 @@ def saha_equation(degeneracy_of_lower_state,
     epsilon_i = ionization_energy_of_lower_state
     epsilon_ip1 = ionization_energy_of_upper_state
 
+    n_e = electron_number_density
     T = temperature
 
     h = const.h.to(units_of_energy+' s')
@@ -68,9 +76,9 @@ def saha_equation(degeneracy_of_lower_state,
     lambda_constant = np.sqrt(h**2 /
                               (2 * np.pi * const.m_e * k_B * T) )
 
-    saha_parameter = ( 2 / lambda_constant**3 *
-                       g_ip1 / g_i *
-                       np.exp(-(epsilon_ip1 - epsilon_i) /(k_B * T))
-                       )
+    saha_ratio = ( 2 / lambda_constant**3 *
+                   g_ip1 / g_i *
+                   np.exp(-(epsilon_ip1 - epsilon_i) /(k_B * T))
+                   ) / n_e
 
     return saha_parameter
