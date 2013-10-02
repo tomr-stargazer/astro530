@@ -49,8 +49,8 @@ def saha_equation(degeneracy_of_lower_state,
                   degeneracy_of_upper_state,
                   ionization_energy_of_lower_state,
                   ionization_energy_of_upper_state,
-                  electron_number_density,
                   temperature,
+                  electron_number_density,
                   units_of_energy='eV'):
     """
     Calculates the Saha equation for a given set of parameters.
