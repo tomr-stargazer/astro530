@@ -33,3 +33,6 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+
+sample_code_for_jesse_throwaway.py
+.gitignore~
