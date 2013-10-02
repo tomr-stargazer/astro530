@@ -47,8 +47,7 @@ Model_3 = {'T_eff': 15000,
 
 def saha_equation(degeneracy_of_lower_state,
                   degeneracy_of_upper_state,
-                  ionization_energy_of_lower_state,
-                  ionization_energy_of_upper_state,
+                  ionization_potential_between_states,
                   temperature,
                   electron_number_density,
                   units_of_energy='eV'):
@@ -65,8 +64,7 @@ def saha_equation(degeneracy_of_lower_state,
     g_i = degeneracy_of_lower_state
     g_ip1 = degeneracy_of_upper_state
 
-    epsilon_i = Quantity(ionization_energy_of_lower_state, units_of_energy)
-    epsilon_ip1 = Quantity(ionization_energy_of_upper_state, units_of_energy)
+    chi_i = Quantity(ionization_potential_between_states, units_of_energy)
 
     n_e = Quantity(electron_number_density, '1 / (m3)')
     T = Quantity(temperature, 'K')
@@ -79,7 +77,7 @@ def saha_equation(degeneracy_of_lower_state,
 
     saha_ratio = ( 2 / lambda_squared**(3/2) *
                    g_ip1 / g_i *
-                   np.exp(-(epsilon_ip1 - epsilon_i) /(k_B * T))
+                   np.exp(-(chi_i) /(k_B * T))
                    ) / n_e
 
     return saha_ratio

@@ -22,7 +22,7 @@ def test_saha_equation():
     
         saha = saha_equation( lower_state_degeneracy,
                               upper_state_degeneracy,
-                              0, chi_01, T, n_e(T))
+                              chi_01, T, n_e(T))
 
         print T, saha, (saha / (1.0+saha.value))
 
