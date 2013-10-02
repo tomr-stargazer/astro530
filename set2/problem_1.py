@@ -157,9 +157,10 @@ def compute_grid_of_number_densities():
                 grid_of_densities[j][i] = number_densities_for_atom[j]
 
 
-        model_table.add_column(Column("AW", atomic_weights))
+        model_table.add_column(Column(name="AW", data=atomic_weights))
         for i in range(grid_of_densities.shape[0]):
-            model_table.add_column(Column("N_%d" % i, grid_of_densities[i]))
+            model_table.add_column(Column(name="N_%d" % i,
+                                          data=grid_of_densities[i]))
 
         output_table_list.append(model_table)
         
