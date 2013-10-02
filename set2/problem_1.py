@@ -81,4 +81,4 @@ def saha_equation(degeneracy_of_lower_state,
                    np.exp(-(epsilon_ip1 - epsilon_i) /(k_B * T))
                    ) / n_e
 
-    return saha_parameter
+    return saha_ratio
