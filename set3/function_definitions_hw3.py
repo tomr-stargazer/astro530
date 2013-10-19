@@ -55,7 +55,7 @@ def hjerting_H1_approximation(damping_parameter, u):
     a = damping_parameter
 
     # Two constants from the homework
-    c1 = 0.56491
+    c1 = 0.56419
     c2 = 0.846
 
     return a * (c1/u**2 + c2/u**4)
@@ -75,7 +75,8 @@ def hjerting_piecewise_approximation(damping_parameter, u):
 
     if damping_parameter > 5e-3:
         raise ValueError(
-            "This piecewise approximation breaks for large values of `a`!")
+            "This piecewise approximation breaks for large values of `a`!\n" 
+            "Tom Rice has made the code throw an error if a > 5e-3.")
     
     a = damping_parameter
 
