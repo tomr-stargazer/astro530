@@ -9,13 +9,12 @@ the time to make it high quality and tested, etc back then.
 from __future__ import division
 
 import numpy as np
-from scipy.integrate import quad, trapz
-from scipy.constants import c
-import scipy.special
+import matplotlib.pyplot as plt
 import astropy.constants as const
 from astropy.units.quantity import Quantity
 
 from function_definitions import flux
+from function_definitions_hw3 import *
 
 def problem_1a():
     """
@@ -37,3 +36,30 @@ def problem_1a():
     print result, "in units of W / (m^2 Hz sr)"
 
     return result
+
+def problem_1b():
+    """
+    Plot H(a, u) from u=0 to u=10, for a=1e-3 and a=1e-4, in loglog space.
+
+    """
+
+    fig = plt.figure()
+
+    u_array = np.arange(0,10, 0.01)
+
+    hv = np.vectorize(hjerting_piecewise_approximation)
+
+    plt.plot(u_array, hv(1e-4, u_array), label=r"$a = 10^{-4}$" )
+    plt.plot(u_array, hv(1e-3, u_array), '--', label=r"$a = 10^{-3}$" )
+
+    plt.legend()
+
+    plt.xlabel("u")
+    plt.ylabel(r"$\phi_\nu$", rotation='horizontal')
+    plt.title("HW #3, Problem 1b: Normalized Line Profile Function. Tom Rice.")
+    
+    plt.loglog()
+
+    plt.show()
+
+    return fig
