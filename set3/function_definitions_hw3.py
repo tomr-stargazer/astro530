@@ -3,6 +3,13 @@
 from __future__ import division
 
 import numpy as np
+from scipy.integrate import quad, trapz
+from scipy.constants import c
+import scipy.special
+import astropy.constants as const
+from astropy.units.quantity import Quantity
+
+from function_definitions import planck_function, eddington_temperature, E2
 
 
 def u_function(frequency, central_frequency, doppler_width):
@@ -85,3 +92,41 @@ def hjerting_piecewise_approximation(damping_parameter, u):
     else:
         return (hjerting_gaussian_approximation(a, u) + 
                 hjerting_H1_approximation(a, u))
+
+hjerting_function = np.vectorize(hjerting_piecewise_approximation)
+
+
+def flux_with_line(continuum_optical_depth, frequency, effective_temperature,
+                   relative_line_center_opacity, line_center_frequency=6e14, 
+                   doppler_width=4e9, damping_parameter=1e-4):
+    """
+    Calculates the flux at `tau_c` noting an absorption line at `nu_0`.
+
+    This is meant to approximate function_definitions.flux for frequencies
+    far away from nu_0.
+
+    """
+
+    tau_c = continuum_optical_depth
+    nu = frequency
+    T_eff = effective_temperature
+    zeta = relative_line_center_opacity
+    a = damping_parameter
+
+    u = u_function(nu, line_center_frequency, doppler_width)
+
+    line_absorption_factor = (1 + zeta * hjerting_function(a, u))
+
+    temp_at_t = lambda t: eddington_temperature(t, T_eff)
+
+    flux = (
+        2 * np.pi * quad(
+            (lambda t: planck_function(temp_at_t(t), nu) * 
+             E2(line_absorption_factor*(t - tau_c))),
+            tau_c, np.inf)[0] -
+        2 * np.pi * quad(
+            (lambda t: planck_function(temp_at_t(t), nu) * 
+             E2(line_absorption_factor*(tau_c - t))),
+            0, tau_c)[0] )
+
+    return flux
