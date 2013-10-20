@@ -12,6 +12,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import astropy.constants as const
 from astropy.units.quantity import Quantity
+from scipy.integrate import trapz
 
 from function_definitions import flux
 from function_definitions_hw3 import *
@@ -72,7 +73,7 @@ def problem_1c(sampling=100):
     fig1 = plt.figure()
     fig2 = plt.figure()
 
-    zeta_list = [0.1, 1, 1e2, 1e3, 1e4, 1e5, 1e6, 1e8]
+    zeta_list = [0.1, 1, 1e1, 1e2, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8]
     a = 1e-4
     T_eff = 5780
 
@@ -80,8 +81,11 @@ def problem_1c(sampling=100):
 
     vflux_with_line = np.vectorize(flux_with_line)
 
-    nu_array = np.linspace(6, 6.002, sampling)*1e14
+    nu_array = (6+5*np.logspace(-10, -3, sampling))*1e14
     ratio_array = np.zeros_like(nu_array)
+
+    equivalent_width_array = np.zeros_like(zeta_list)
+    equivalent_width_array_lambda = np.zeros_like(zeta_list)    
 
     tau_c_list = [0, 10]
 
@@ -89,7 +93,7 @@ def problem_1c(sampling=100):
 
         ax = fig.add_subplot(1,1,1)
 
-        for zeta in zeta_list:
+        for j, zeta in zip(range(len(zeta_list)), zeta_list):
 
             for i in range(len(ratio_array)):
                 ratio_array[i] = (flux_with_line(
@@ -98,6 +102,10 @@ def problem_1c(sampling=100):
 
             ax.plot(nu_array, ratio_array, label=r"$\zeta = 10^{%d}$" % 
                     np.log10(zeta))
+
+            equivalent_width_array[j] = trapz(1-ratio_array, nu_array)*2
+            equivalent_width_array_lambda[j] = trapz(
+                1-ratio_array, -(const.c / nu_array))*2
 
             print "done with zeta = %f" % zeta
 
@@ -110,7 +118,10 @@ def problem_1c(sampling=100):
         ax.set_xlim(nu_array.min(), nu_array.max())
         ax.set_ylim(0,1)
 
+        break
+
     plt.show()
         
-    return (fig1, fig2)
+    return (fig1, fig2, zeta_list, 
+            equivalent_width_array, equivalent_width_array_lambda)
 
