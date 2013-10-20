@@ -61,7 +61,7 @@ def problem_1b():
 
     return fig
 
-def problem_1c():
+def problem_1c(sampling=100):
     """
     Plot the line profile for a diversity of different zetas.
 
@@ -78,36 +78,39 @@ def problem_1c():
 
     delta_nu = 4e9 # corresponding to v_thermal = 2 km/s    
 
-    vflux = np.vectorize(flux)
     vflux_with_line = np.vectorize(flux_with_line)
 
-    nu_array = np.linspace(5.995, 6.005, 500)*1e14
+    nu_array = np.linspace(6, 6.002, sampling)*1e14
+    ratio_array = np.zeros_like(nu_array)
 
     tau_c_list = [0, 10]
 
     for tau_c, fig in zip(tau_c_list, (fig1, fig2)):
+
+        ax = fig.add_subplot(1,1,1)
+
         for zeta in zeta_list:
 
-            ax = fig.add_subplot(1,1,1)
-            
-            ratio_array = (vflux_with_line(tau_c, nu_array, T_eff, zeta) /
-                           vflux(tau_c, nu_array, T_eff) )
+            for i in range(len(ratio_array)):
+                ratio_array[i] = (flux_with_line(
+                    tau_c, nu_array[i], T_eff, zeta) /
+                    flux(tau_c, np.median(nu_array), T_eff) )
 
             ax.plot(nu_array, ratio_array, label=r"$\zeta = 10^{%d}$" % 
                     np.log10(zeta))
 
             print "done with zeta = %f" % zeta
 
-            break
+        ax.set_title(r"HW #3, Problem 1c: Line Profiles at $\tau_c = %d$ star of $T_{eff} = 5780 K$. Tom Rice." % tau_c)
+        ax.set_xlabel(r"Frequency $\nu$ (Hz)")
+        ax.set_ylabel(r"$F_\nu / F_c$")
 
-        plt.title(r"HW #3, Problem 1c: Line Profiles at $\tau_c = %d$ star of $T_{eff} = 5780 K$. Tom Rice." % tau_c)
-        plt.xlabel(r"Frequency $\nu$ (Hz)")
-        plt.ylabel(r"$\frac{F_\nu}{F_c}$")
+        ax.legend()
 
-        plt.legend()
-        plt.show()
+        ax.set_xlim(nu_array.min(), nu_array.max())
+        ax.set_ylim(0,1)
 
-        plt.xlim(nu_array.min(), nu_array.max())
-
+    plt.show()
+        
     return (fig1, fig2)
 
