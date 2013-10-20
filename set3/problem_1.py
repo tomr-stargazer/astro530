@@ -16,6 +16,11 @@ from astropy.units.quantity import Quantity
 from function_definitions import flux
 from function_definitions_hw3 import *
 
+line_center_wavelength = Quantity(5000, 'Angstrom')
+line_center_frequency = const.c/line_center_wavelength
+
+print line_center_frequency.to('Hz')
+
 def problem_1a():
     """
     Calculate the emergent flux at 5000 Angstroms (0.5 microns) for
@@ -23,14 +28,8 @@ def problem_1a():
     and an effective temperature of 5780 K, with the source function
     as the Planck function.
 
-    """
-
-    wavelength = Quantity(5000, 'Angstrom')
-    frequency = const.c/wavelength
-
-    print frequency.to('Hz')
-    
-    result = flux(0, frequency, 5780)
+    """    
+    result = flux(0, line_center_frequency, 5780)
 
     # these units are not DIRECTLY tested anywhere. I currently trust them. 
     print result, "in units of W / (m^2 Hz sr)"
