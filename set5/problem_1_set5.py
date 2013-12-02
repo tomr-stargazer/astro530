@@ -9,6 +9,7 @@ one solar mass.
 from __future__ import division
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 from astropy.constants import k_B, m_p, G, M_sun
 from astropy.units.quantity import Quantity
@@ -77,3 +78,11 @@ def centrifugal_radius(time, temperature, angular_velocity_factor):
     r_c = c_s * t**3 / 16 * omega**2
 
     return r_c.to('m')
+
+def plot_problem_1c():
+    """
+    Makes the plots for problem 1c.
+
+    """
+
+    pass    
