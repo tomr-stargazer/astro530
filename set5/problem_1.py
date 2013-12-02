@@ -22,9 +22,9 @@ def sound_speed(temperature, mean_molecular_weight=1.4):
     Parameters
     ----------
     temperature : float
-        Temperature in units kelvin of the gas.
+        Temperature of the gas in units kelvin.
     mean_molecular_weight : float, optional
-        Mean molecular weight (\mu) of the gas under consideration.
+        Mean molecular weight (\mu) of the gas.
         Default is 1.4, corresponding to some mix of H and He.
 
     Returns
