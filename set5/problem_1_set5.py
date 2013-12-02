@@ -13,7 +13,7 @@ import numpy as np
 from astropy.constants import k_B, m_p, G, M_sun
 from astropy.units.quantity import Quantity
 
-def sound_speed(temperature, mean_molecular_weight=1.4):
+def sound_speed(temperature, mean_molecular_weight=2.3):
     """
     Computes the sound speed $c_s$ given an input temperature.
 
