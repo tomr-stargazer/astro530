@@ -3,7 +3,7 @@ Some basic unit tests for Problem 1.
 
 """
 
-from problem_1 import *
+from problem_1_set5 import *
 
 def test_sound_speed():
 
