@@ -127,7 +127,7 @@ def M_d_at_t_in_R(time, radius, normalization_constant=1):
     return 2*np.pi* quad( r_times_Sigma_at_t, 0, R)[0]
     
 
-def problem_3b():
+def problem_3b(disk_mass=0.1):
     """
     Consider a 1 solar mass central star with R_1 = 10 AU and
     a disk mass of 0.1 M_sun at the initial time t=0.
@@ -148,6 +148,69 @@ def problem_3b():
     
     """
 
+    t_list = [0.5e6, 1e6, 3e6]
+    r_array = np.logspace(-1, 2.25, 20)
 
+    # calculate the normalization dudes
+    C_list = []
+    for t in t_list:
+
+        r_times_Sigma_at_t = lambda r: r*surface_density_at_R_t(r, t)
+
+        C = disk_mass / M_d_at_t_in_R(t, r_array.max())
+
+        C_list.append( C )
+
+    fig_1 = plt.figure()
+    ax1 = plt.gca()
+
+    fig_2 = plt.figure()
+    ax2 = plt.gca()
+
+    fig_3 = plt.figure()
+    ax3 = plt.gca()
+
+    for t, C in zip(t_list, C_list):
+        # Sigma(R)
+        ax1.plot(r_array, surface_density_at_R_t(r_array, t, 
+                                                 normalization_constant=C),
+                 label=r'$%s \times 10^6$ yr' % (t/1e6))
+
+        # M_d(R)
+        ax2.plot(r_array, np.vectorize(M_d_at_t_in_R)(t, r_array, C),
+                 label=r'$%s \times 10^6$ yr' % (t/1e6))
+        
+        # Mdot(R)
+        ax3.plot(r_array, Mdot_at_t_R(t, r_array, normalization_constant=C),
+                 label=r'$%s \times 10^6$ yr' % (t/1e6))
+
+    ax1.legend(loc='lower left')
+    ax2.legend(loc='lower right')
+    ax3.legend(loc='upper left')
+    
+    ax1.set_ylabel(r"$\Sigma(R)$")
+    ax2.set_ylabel(r"$M_d(R)$")
+    ax3.set_ylabel("$\dot{M}(R)$")
+
+    ax1.set_title("Surface density of disk")
+    ax2.set_title("Mass of disk within radius R")
+    ax3.set_title("Mass accretion rate of disk")
+
+    for ax in [ax1, ax2, ax3]:
+        ax.set_xlim(r_array.min(), r_array.max())
+        ax.set_xlabel("Radius (AU)")        
+
+    ax1.loglog()
+    ax2.loglog()
+    ax3.semilogx()
+
+    ax1.set_ylim(1e-15, 1)
+    
+    plt.show()
+
+    
+
+    
+        
     
     
