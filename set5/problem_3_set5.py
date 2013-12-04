@@ -153,8 +153,6 @@ def problem_3b(disk_mass=0.1):
     C_list = []
     for t in t_list:
 
-        r_times_Sigma_at_t = lambda r: r*surface_density_at_R_t(r, t)
-
         C = disk_mass / M_d_at_t_in_R(t, r_array.max())
 
         C_list.append( C )
@@ -206,9 +204,35 @@ def problem_3b(disk_mass=0.1):
     
     plt.show()
 
-    
+def problem_3c(disk_mass=0.1):
+    """
+    Compute and plot the behavior of M_d(t) and Mdot(t, R->0).
+    Give masses and mass accretion rates in units of M_sun 
+    and M_sun yr^-1, respectively.
 
-    
+    """
+
+    # M_d(t) is probably M_d(R_max) as a function of time.
+
+    r_outer = 10**2.25
+
+    t_array = np.logspace(0, 7, 100)
+    C_list = []
+    for t in t_array:
+
+        C = disk_mass / M_d_at_t_in_R(t, r_outer)
+        C_list.append( C )
         
-    
-    
+
+    plt.figure()
+
+    # M_d(t)
+    plt.plot(t_array,
+             np.vectorize(M_d_at_t_in_R)(t_array, r_outer, C_list))
+
+    plt.figure()
+
+    # Mdot(t, R->0)
+    plt.plot(t_array, Mdot_at_t_R(t_array, 0))
+
+    plt.show()
