@@ -32,7 +32,7 @@ def temperature_at_R(radius):
 
 def angular_velocity_at_R(radius, central_mass=1):
     """
-    Returns the angular velocity at radius R in AU.
+    Returns the angular velocity Omega at radius R in AU.
 
     """
 
@@ -119,11 +119,9 @@ def M_d_at_t_in_R(time, radius, normalization_constant=1):
     R = radius
     C = normalization_constant
 
-    # integrate Sigma from zero to R?
+    # integrate 2 pi R Sigma from zero to R
     r_times_Sigma_at_t = lambda r: r*surface_density_at_R_t(r, t, C)
 
-    # Mass = Integrate ( 2 pi R sigma(R) dr )
-    
     return 2*np.pi* quad( r_times_Sigma_at_t, 0, R)[0]
     
 
