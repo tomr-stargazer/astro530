@@ -11,6 +11,8 @@ from __future__ import division
 import numpy as np
 import matplotlib.pyplot as plt
 
+from scipy.integrate import quad
+
 from astropy.units.quantity import Quantity
 from astropy.constants import M_sun, G
 
@@ -22,9 +24,11 @@ def temperature_at_R(radius):
 
     """
 
-    R = radius
+    R = Quantity(radius, unit='AU')
 
-    return 300 * (R)**(-1/2)
+    T = 300 * (R.value)**(-1/2)
+
+    return Quantity(T, unit='K')
 
 def angular_velocity_at_R(radius, central_mass=1):
     """
@@ -37,7 +41,7 @@ def angular_velocity_at_R(radius, central_mass=1):
 
     omega = (G * M / R**3)**(1/2)
 
-    return omega
+    return omega.to('s-1')
     
 
 def viscosity_at_R(radius, alpha=0.01):
@@ -46,7 +50,7 @@ def viscosity_at_R(radius, alpha=0.01):
     
     """
     
-    R = radius
+    R = Quantity(radius, unit='AU')
     T = temperature_at_R(R)
     c_s = sound_speed(T)
     omega = angular_velocity_at_R(R)
@@ -63,11 +67,11 @@ def t_V_at_t(time, scaling_radius=10):
 
     R_1 = Quantity(scaling_radius, unit='AU')
 
-    t = time
+    t = Quantity(time, unit='yr')
 
-    t_V = t * 3*viscosity_at_R(R_1) / R_1**2 + 1
+    t_V = (t * (3*viscosity_at_R(R_1) / R_1**2)) + Quantity(1, '')
 
-    return t_V
+    return t_V.decompose()
     
 def surface_density_at_R_t(radius, time, normalization_constant=1,
                            scaling_radius=10):
@@ -76,11 +80,11 @@ def surface_density_at_R_t(radius, time, normalization_constant=1,
 
     """
 
-    R = radius
-    t = time
+    R = Quantity(radius, 'AU')
+    t = Quantity(time, 'yr')
     C = normalization_constant
     R_1 = Quantity(scaling_radius, unit='AU')
-    nu_R1 = viscosity_at_R(scaling_radius)
+    nu_R1 = viscosity_at_R(R_1)
 
     t_V = t_V_at_t(time)
 
@@ -94,13 +98,34 @@ def Mdot_at_t_R(time, radius, normalization_constant=1,
     """
 
     C = normalization_constant
+    t = Quantity(time, 'yr')
+    R = Quantity(radius, 'AU')
+    R_1 = Quantity(scaling_radius, 'AU')
+
+    t_V = t_V_at_t(t)
+
+    Mdot = -C * (t_V)**(-3/2) * (np.exp(-R/(R_1 * t_V)) *
+                                 (Quantity(1,'') - 2*R/(R_1 * t_V)))
+
+    return Mdot
+
+def M_d_at_t_in_R(time, radius, normalization_constant=1):
+    """
+    Returns the disk mass M_d contained in radius R at time t.
+    
+    """
+
     t = time
     R = radius
-    R_1 = scaling_radius
+    C = normalization_constant
 
-    t_V = t_V_at_t(time)
+    # integrate Sigma from zero to R?
+    r_times_Sigma_at_t = lambda r: r*surface_density_at_R_t(r, t, C)
+
+    # Mass = Integrate ( 2 pi R sigma(R) dr )
     
-    Mdot = C * t_V * np.exp(-R/(R_1 * t_V))*(1 - 2*R/(R_1 * t_V))
+    return 2*np.pi* quad( r_times_Sigma_at_t, 0, R)[0]
+    
 
 def problem_3b():
     """
