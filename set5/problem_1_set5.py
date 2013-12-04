@@ -9,7 +9,6 @@ one solar mass.
 from __future__ import division
 
 import numpy as np
-import matplotlib.pyplot as plt
 
 from astropy.constants import k_B, m_p, G, M_sun
 from astropy.units.quantity import Quantity
