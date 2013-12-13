@@ -7,7 +7,7 @@ from __future__ import division
 
 import numpy as np
 from scipy.integrate import quad
-from astropy.constants import c, R_sun
+from astropy.constants import c, R_sun, M_sun
 from astropy.units.quantity import Quantity
 
 from astro530.set5.problem_3_set5 import (temperature_at_R, 
@@ -19,7 +19,7 @@ from astro530.set1.function_definitions import planck_function
 def dust_opacity_at_nu(nu):
     """ Calculates dust opacity kappa_nu at wavelength nu. """
 
-    kappa_nu = 0.1 * (nu / 1e12)
+    kappa_nu = Quantity(0.1 * (Quantity(nu, 'Hz').value / 1e12), 'cm2 g-1')
 
     return kappa_nu
 
@@ -28,7 +28,7 @@ R_inner = Quantity(0.04, 'AU')
 
 t = Quantity(1e6, 'yr')
 
-C = 0.1 / M_d_at_t_in_R(t, R_outer)
+C = 0.1 / Quantity(1, 'yr') / M_d_at_t_in_R(t, R_outer) * M_sun
 
 def disk_flux_at_R_nu(radius, frequency):
     """ Computes the disk spectral flux at radius R for frequency nu. """
@@ -40,6 +40,8 @@ def disk_flux_at_R_nu(radius, frequency):
     nu = frequency
 
     tau = surface_density_at_R_t(R, t, C) * dust_opacity_at_nu(nu)
+
+    #    print tau.decompose()
 
     blackbody_flux = planck_function(temperature_at_R(R), nu).to('erg s-1 cm-2 Hz-1')
 
@@ -100,3 +102,5 @@ def plot_SED_star():
 
     return (wavelength_array, SED_array)
         
+
+#def make_a_cool_plot

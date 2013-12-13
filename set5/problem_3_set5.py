@@ -82,13 +82,15 @@ def surface_density_at_R_t(radius, time, normalization_constant=1,
 
     R = Quantity(radius, 'AU')
     t = Quantity(time, 'yr')
-    C = normalization_constant
+    C = Quantity(normalization_constant, 'kg s-1')
     R_1 = Quantity(scaling_radius, unit='AU')
     nu_R1 = viscosity_at_R(R_1)
 
     t_V = t_V_at_t(time)
 
-    return C * (t_V)**(-3/2)*R_1 / (3*np.pi*R*nu_R1) * np.exp(-R*R_1/t_V)
+    sigma = C * (t_V)**(-3/2)*R_1 / (3*np.pi*R*nu_R1) * np.exp(-R*R_1/t_V) 
+
+    return sigma
 
 def Mdot_at_t_R(time, radius, normalization_constant=1,
                 scaling_radius=10):
