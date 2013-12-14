@@ -6,6 +6,7 @@ Computes and plots the observed SED for a disk model from last homework.
 from __future__ import division
 
 import numpy as np
+import matplotlib.pyplot as plt
 from scipy.integrate import quad
 from astropy.constants import c, R_sun, M_sun
 from astropy.units.quantity import Quantity
@@ -76,9 +77,9 @@ def flux_from_star(nu):
 
     return flux.to('erg cm-2 Hz-1 s-1')
 
-def plot_SED_disk():
+def plot_SED_disk(sampling=20):
 
-    wavelength_array = Quantity(np.logspace(-1, 2, 20)*3e-6, 'm')
+    wavelength_array = Quantity(np.logspace(-1, 2, sampling)*3e-6, 'm')
     nu_array = c / wavelength_array
 
     SED_array = np.zeros_like(nu_array)
@@ -89,18 +90,38 @@ def plot_SED_disk():
 
     return (wavelength_array, SED_array)
 
-def plot_SED_star():
+def plot_SED_star(sampling=20):
 
-    wavelength_array = Quantity(np.logspace(-1, 2, 20)*3e-6, 'm')
+    wavelength_array = Quantity(np.logspace(-1, 2, sampling)*3e-6, 'm')
     nu_array = c / wavelength_array
 
     SED_array = np.zeros_like(nu_array)
     
     for nu, i in zip(nu_array, range(len(nu_array))):
 
+        #        print (nu.to('Hz')*flux_from_star(nu)).unit
         SED_array[i] = nu*(flux_from_star(nu))
 
     return (wavelength_array, SED_array)
         
 
-#def make_a_cool_plot
+def make_a_cool_plot(sampling=20):
+
+    star = plot_SED_star(sampling)
+    disk = plot_SED_disk(sampling)
+
+    fig = plt.figure()
+
+    plt.plot(star[0]*1e6, star[1])
+    plt.plot(disk[0]*1e6, disk[1])
+    plt.plot(disk[0]*1e6, star[1]+disk[1])
+
+    plt.xlim(0.3, 300)
+    plt.ylim(1e-15, 1e-7)
+
+    plt.ylabel("erg cm$^{-2}$ s$^{-1}$")
+    plt.xlabel("Wavelength ($\mu$m)")
+
+    plt.loglog()
+
+    plt.show()
